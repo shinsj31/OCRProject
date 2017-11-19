@@ -3,5 +3,6 @@ c:\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: 현재 코드
 c:\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
 c:\opencv\build\include\opencv2\core\utility.hpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
 c:\opencv\build\include\opencv2\core\utility.hpp : warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+d:\신수정\과제\심화전공실습1\프로젝트\sim_project\sim_project\ocr.cpp(140): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   sim_project.vcxproj -> D:\신수정\과제\심화전공실습1\프로젝트\sim_project\x64\Debug\sim_project.exe
   sim_project.vcxproj -> D:\신수정\과제\심화전공실습1\프로젝트\sim_project\x64\Debug\sim_project.pdb (Partial PDB)

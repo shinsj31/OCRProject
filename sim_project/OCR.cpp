@@ -4,6 +4,13 @@
 
 OCR::OCR()
 {
+	//데이터 초기화
+	all.count = 0;
+	for (int i = 0; i < MAX_DATA_COUNT; i++)
+	{
+		all.data[i].isFixed = false;
+		all.data[i].nextIsSpace = false;
+	}
 }
 
 
@@ -69,8 +76,9 @@ void OCR::ParsingStepFirst()
 	}
 }
 
-/*Step2. 하나의 라인 내에서 가로선 구분하기.
-가로선 구분 후 마지막에는 줄바꿈을 추가해준다.(라인이 바뀌는 것을 표시하기 위해)*/
+/*Step2. 하나의 라인 내에서 각 글자의 가로선 구분하기.
+가로선 구분 후 마지막에는 줄바꿈을 추가해준다.(라인이 바뀌는 것을 표시하기 위해)
+각 글자 사이의 간격들 중 가장 큰 간격을 구한 후 그 길이의 0.7만큼을 띄어쓰기 영역 기준으로 두자.*/
 void OCR::ParsingStepSecond(int top, int bottom)
 {
 	int nWidth = img.cols;
@@ -79,6 +87,10 @@ void OCR::ParsingStepSecond(int top, int bottom)
 	bool isLetter;
 	bool prevLineState = false;
 
+	int gapSpace = 0;
+	int prevX = -1;
+
+	int startCount = all.count;
 
 	for (int x = 0; x < nWidth; x++)
 	{
@@ -105,8 +117,16 @@ void OCR::ParsingStepSecond(int top, int bottom)
 		{
 			if (prevLineState)
 			{
+				//한 글자의 가로영역 찾기 완료.
 				all.data[all.count].rect.end.x = x - 1;
 				all.data[all.count].rect.end.y = bottom;
+
+				if (prevX > 0)
+				{//라인의 첫 글자를 배제하기 위해서!
+					if (gapSpace < (all.data[all.count].rect.start.x) - prevX)
+						gapSpace = (all.data[all.count].rect.start.x) - prevX;
+				}
+				prevX = x - 1;
 
 				//경계선 보정작업
 				ParsingStepThird(&all.data[all.count].rect);
@@ -116,6 +136,8 @@ void OCR::ParsingStepSecond(int top, int bottom)
 		}
 		prevLineState = isLetter;
 	}
+	//띄어쓰기 추가하기
+	AddSpaces(startCount, all.count - 1, gapSpace*0.7);
 	//줄바꿈 문자 추가하기
 	all.data[all.count].isFixed = true;
 	all.data[all.count++].letter.value = '\n';
@@ -162,6 +184,20 @@ void OCR::ParsingStepThird(my_Rect * rect)
 		}
 		if (isLetter)	//글자라인이 아니라면 더이상 탐색할 필요가 없다.
 			break;
+	}
+}
+
+/*인자: 라인의 시작 카운트, 끝 카운트, 공백 기준
+다음 문자와의 거리가 기준거리보다 크면 띄어쓰기로 인식, 해당 데이터의 nextIsSpace를 true로 바꿔준다.*/
+void OCR::AddSpaces(int startCount, int endCount, int stdGap)
+{
+	int gap;
+	
+	for (int i = startCount; i < endCount; i++)
+	{
+		gap = (all.data[i + 1].rect.start.x) - (all.data[i].rect.end.x);
+		if (gap > stdGap)
+			all.data[i].nextIsSpace = true;
 	}
 }
 

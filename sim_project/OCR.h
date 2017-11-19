@@ -22,6 +22,7 @@ struct Data
 	Letter letter;
 	my_Rect rect;
 	bool isFixed;
+	bool nextIsSpace;	//이 글자 다음에 띄어쓰기를 추가해야하는가?
 };
 struct AllData {
 	//이미지 내의 모든 글자 데이터를 저장하는 구조체
@@ -43,5 +44,6 @@ public:
 	void ParsingStepFirst();
 	void ParsingStepSecond(int top, int bottom);
 	void ParsingStepThird(my_Rect* rect);
+	void AddSpaces(int startCount, int endCount, int stdGap);
 	void ShowResultImage(int height, int width, int top, int startX);
 };
